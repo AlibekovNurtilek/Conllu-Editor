@@ -1,5 +1,5 @@
-// src/components/Sidebar.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { AiFillEnvironment } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
@@ -9,19 +9,17 @@ import { AiOutlineFileText } from "react-icons/ai";
 import { IoPersonSharp } from "react-icons/io5";
 import { CiSettings } from "react-icons/ci";
 
-
-
 const Sidebar = ({ open, setOpen }) => {
   const Menus = [
-    { title: "Dashboard" },
-    { title: "Pages", icon: <AiOutlineFileText /> },
-    { title: "About us", icon: <AiFillDingtalkSquare /> },
+    { title: "Негизги бет", path: "/" },
+    { title: "Колдонмо", icon: <AiOutlineFileText />, path: "/instruction" },
+    { title: "Биз жонундо", icon: <AiFillDingtalkSquare />, path: "/about-us" },
   ];
 
   const BottomMenus = [
-    {title: "Profile", icon: <IoPersonSharp />},
-    {title: "Settings", icon: <CiSettings />}
-  ]
+    { title: "Profile", icon: <IoPersonSharp /> },
+    { title: "Settings", icon: <CiSettings /> },
+  ];
 
   return (
     <div
@@ -75,39 +73,73 @@ const Sidebar = ({ open, setOpen }) => {
           <li
             key={index}
             className={`text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md 
-                ${menu.bottom? "mt-72": "mt-2"}`}
+                ${menu.bottom ? "mt-72" : "mt-2"}`}
           >
-            <span className="text-2xl block float-left">
-              {menu.icon ? menu.icon : <RiDashboardFill />}
-            </span>
-            <span
-              className={`text-base font-medium flex-1 duration-200 ${
-                !open && "hidden"
-              }`}
-            >
-              {menu.title}
-            </span>
+            {menu.path ? (
+              <Link to={menu.path} className="flex items-center gap-x-4 w-full">
+                <span className="text-2xl block float-left">
+                  {menu.icon ? menu.icon : <RiDashboardFill />}
+                </span>
+                <span
+                  className={`text-base font-medium flex-1 duration-200 ${
+                    !open && "hidden"
+                  }`}
+                >
+                  {menu.title}
+                </span>
+              </Link>
+            ) : (
+              <div className="flex items-center gap-x-4 w-full">
+                <span className="text-2xl block float-left">
+                  {menu.icon ? menu.icon : <RiDashboardFill />}
+                </span>
+                <span
+                  className={`text-base font-medium flex-1 duration-200 ${
+                    !open && "hidden"
+                  }`}
+                >
+                  {menu.title}
+                </span>
+              </div>
+            )}
           </li>
         ))}
       </ul>
 
       <ul className="absolute left-5 bottom-2">
-        {BottomMenus    .map((menu, index) => (
+        {BottomMenus.map((menu, index) => (
           <li
             key={index}
             className={`text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md 
-                ${menu.bottom? "mt-72": "mt-2"}`}
+                ${menu.bottom ? "mt-72" : "mt-2"}`}
           >
-            <span className="text-2xl block float-left">
-              {menu.icon ? menu.icon : <RiDashboardFill />}
-            </span>
-            <span
-              className={`text-base font-medium flex-1 duration-200 ${
-                !open && "hidden"
-              }`}
-            >
-              {menu.title}
-            </span>
+            {menu.path ? (
+              <Link to={menu.path} className="flex items-center gap-x-4 w-full">
+                <span className="text-2xl block float-left">
+                  {menu.icon ? menu.icon : <RiDashboardFill />}
+                </span>
+                <span
+                  className={`text-base font-medium flex-1 duration-200 ${
+                    !open && "hidden"
+                  }`}
+                >
+                  {menu.title}
+                </span>
+              </Link>
+            ) : (
+              <div className="flex items-center gap-x-4 w-full">
+                <span className="text-2xl block float-left">
+                  {menu.icon ? menu.icon : <RiDashboardFill />}
+                </span>
+                <span
+                  className={`text-base font-medium flex-1 duration-200 ${
+                    !open && "hidden"
+                  }`}
+                >
+                  {menu.title}
+                </span>
+              </div>
+            )}
           </li>
         ))}
       </ul>
