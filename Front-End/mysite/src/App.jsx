@@ -17,7 +17,7 @@ const App = () => {
         <Sidebar open={open} setOpen={setOpen} />
 
         {/* Main Content */}
-        <div className="p-7 flex-1">
+        <div className="flex-1">
           <Routes>
             <Route path="/" element={<Mainpage/>} />
             <Route path="/instruction" element={<Instruction/>} />
