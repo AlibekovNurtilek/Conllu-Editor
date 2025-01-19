@@ -7,9 +7,10 @@ import { RiDashboardFill } from "react-icons/ri";
 import { AiFillDingtalkSquare } from "react-icons/ai";
 import { AiOutlineFileText } from "react-icons/ai";
 import { IoPersonSharp } from "react-icons/io5";
-import { CiSettings } from "react-icons/ci";
+import { CiLogout } from "react-icons/ci";
+import Cookies from "js-cookie";
 
-const Sidebar = ({ open, setOpen }) => {
+const Sidebar = ({ open, setOpen, handleLogout }) => {
   const Menus = [
     { title: "Негизги бет", path: "/" },
     { title: "Колдонмо", icon: <AiOutlineFileText />, path: "/instruction" },
@@ -18,8 +19,15 @@ const Sidebar = ({ open, setOpen }) => {
 
   const BottomMenus = [
     { title: "Profile", icon: <IoPersonSharp /> },
-    { title: "Settings", icon: <CiSettings /> },
+    { title: "Log out", icon: <CiLogout /> },
   ];
+
+  const handleLogoutClick = () => {
+    // Логика выхода
+    Cookies.remove("currentUser");
+    Cookies.remove("loginTime");
+    handleLogout(); // Вызов переданного обработчика выхода
+  };
 
   return (
     <div
@@ -47,25 +55,6 @@ const Sidebar = ({ open, setOpen }) => {
         >
           ManasNPL
         </h1>
-      </div>
-
-      <div
-        className={`flex items-center rounded-md bg-light-white mt-6 ${
-          !open ? "px-2.5" : "px-4"
-        } py-2`}
-      >
-        <BsSearch
-          className={`text-white text-lg block float-left cursor-pointer ${
-            open && "mr-2"
-          }`}
-        />
-        <input
-          type={"search"}
-          placeholder="Search"
-          className={`text-base bg-transparent w-full text-white focus:outline-none ${
-            !open && "hidden"
-          }`}
-        />
       </div>
 
       <ul className="pt-2">
@@ -113,8 +102,11 @@ const Sidebar = ({ open, setOpen }) => {
             className={`text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-light-white rounded-md 
                 ${menu.bottom ? "mt-72" : "mt-2"}`}
           >
-            {menu.path ? (
-              <Link to={menu.path} className="flex items-center gap-x-4 w-full">
+            {menu.title === "Log out" ? (
+              <div
+                className="flex items-center gap-x-4 w-full"
+                onClick={handleLogoutClick} // Обработчик для кнопки выхода
+              >
                 <span className="text-2xl block float-left">
                   {menu.icon ? menu.icon : <RiDashboardFill />}
                 </span>
@@ -125,7 +117,7 @@ const Sidebar = ({ open, setOpen }) => {
                 >
                   {menu.title}
                 </span>
-              </Link>
+              </div>
             ) : (
               <div className="flex items-center gap-x-4 w-full">
                 <span className="text-2xl block float-left">

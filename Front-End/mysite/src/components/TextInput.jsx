@@ -30,13 +30,16 @@ const TextInput = ({ input, onProcess }) => {
         value={text}
         onChange={handleInputChange}
       />
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
-        onClick={handleProcess}
-      >
-        Иштетүү
-      </button>
+      <div className="flex justify-end mt-4">
+        <button
+          className="bg-dark-purple text-white px-10 py-2 rounded hover:bg-blue-900"
+          onClick={handleProcess}
+        >
+          Иштетүү
+        </button>
+      </div>
     </div>
+  
   );
 };
 
