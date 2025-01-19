@@ -10,7 +10,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import Cookies from "js-cookie";
 
-const Sidebar = ({ open, setOpen, handleLogout }) => {
+const Sidebar = ({ open, setOpen, handleLogout, username }) => {
   const Menus = [
     { title: "Негизги бет", path: "/" },
     { title: "Колдонмо", icon: <AiOutlineFileText />, path: "/instruction" },
@@ -18,7 +18,7 @@ const Sidebar = ({ open, setOpen, handleLogout }) => {
   ];
 
   const BottomMenus = [
-    { title: "Profile", icon: <IoPersonSharp /> },
+    { title: username, icon: <IoPersonSharp /> },
     { title: "Log out", icon: <CiLogout /> },
   ];
 

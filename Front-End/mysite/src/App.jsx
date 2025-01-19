@@ -10,6 +10,7 @@ import AboutUs from "./components/AboutUs";
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [open, setOpen] = useState(true);
+  
   useEffect(() => {
     // Проверяем cookies на наличие информации о пользователе и времени последней авторизации
     const savedUser = Cookies.get('currentUser');
@@ -31,8 +32,8 @@ function App() {
   const handleLogin = (user) => {
     setCurrentUser(user);
     const currentTime = Date.now();
-    Cookies.set('currentUser', JSON.stringify(user), { expires: 1 / 24 }); // Сохраняем на 1 час
-    Cookies.set('loginTime', currentTime.toString(), { expires: 1 / 24 }); // Сохраняем время авторизации
+    Cookies.set('currentUser', JSON.stringify(user), { expires: 1 / 24 });
+    Cookies.set('loginTime', currentTime.toString(), { expires: 1 / 24 });
   };
 
   const handleLogout = () => {
@@ -52,10 +53,10 @@ function App() {
 
     <div className="flex">
       {/* Sidebar Component */}
-      <Sidebar open={open} setOpen={setOpen} handleLogout={handleLogout}/>
+      <Sidebar open={open} setOpen={setOpen} handleLogout={handleLogout} username={currentUser.username}/>
 
       {/* Main Content */}
-      <div className="p-7 flex-1">
+      <div className=" flex-1">
         <Routes>
           <Route path="/" element={<Mainpage/>} />
           <Route path="/instruction" element={<Instruction/>} />
