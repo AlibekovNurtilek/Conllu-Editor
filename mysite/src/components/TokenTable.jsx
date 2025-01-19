@@ -34,9 +34,7 @@ const TokenTable = ({ tokens, onTokenChange, onEditText, onFinishMarkup }) => {
                       type="text"
                       className="w-full p-1"
                       placeholder="Лемма"
-                      onChange={(e) =>
-                        handleTokenChange(index, "LEMMA", e.target.value)
-                      }
+                      
                     />
                   </td>
                   <td className="border border-gray-300 px-2 py-1">
@@ -44,9 +42,7 @@ const TokenTable = ({ tokens, onTokenChange, onEditText, onFinishMarkup }) => {
                       type="text"
                       className="w-full p-1"
                       placeholder="UPOS"
-                      onChange={(e) =>
-                        handleTokenChange(index, "UPOS", e.target.value)
-                      }
+                      
                     />
                   </td>
                   <td className="border border-gray-300 px-2 py-1">
@@ -54,9 +50,7 @@ const TokenTable = ({ tokens, onTokenChange, onEditText, onFinishMarkup }) => {
                       type="text"
                       className="w-full p-1"
                       placeholder="XPOS"
-                      onChange={(e) =>
-                        handleTokenChange(index, "XPOS", e.target.value)
-                      }
+                      
                     />
                   </td>
                   <td className="border border-gray-300 px-2 py-1">
@@ -64,9 +58,7 @@ const TokenTable = ({ tokens, onTokenChange, onEditText, onFinishMarkup }) => {
                       type="text"
                       className="w-full p-1"
                       placeholder="FEATS"
-                      onChange={(e) =>
-                        handleTokenChange(index, "FEATS", e.target.value)
-                      }
+                      
                     />
                   </td>
                   <td className="border border-gray-300 px-2 py-1">
@@ -74,9 +66,7 @@ const TokenTable = ({ tokens, onTokenChange, onEditText, onFinishMarkup }) => {
                       type="number"
                       className="w-full p-1"
                       placeholder="HEAD"
-                      onChange={(e) =>
-                        handleTokenChange(index, "HEAD", e.target.value)
-                      }
+                      
                     />
                   </td>
                   <td className="border border-gray-300 px-2 py-1">
@@ -84,9 +74,7 @@ const TokenTable = ({ tokens, onTokenChange, onEditText, onFinishMarkup }) => {
                       type="text"
                       className="w-full p-1"
                       placeholder="DEPREL"
-                      onChange={(e) =>
-                        handleTokenChange(index, "DEPREL", e.target.value)
-                      }
+                      
                     />
                   </td>
                 </tr>
