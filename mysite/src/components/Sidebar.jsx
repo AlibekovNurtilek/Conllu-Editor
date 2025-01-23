@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 const Sidebar = ({ open, setOpen, handleLogout, username }) => {
   const Menus = [
     { title: "Негизги бет", path: "/" },
-    { title: "Колдонмо", icon: <AiOutlineFileText />, path: "/instruction" },
+    { title: "Суйломдор", icon: <AiOutlineFileText />, path: "/sentences" },
     { title: "Биз жонундо", icon: <AiFillDingtalkSquare />, path: "/about-us" },
   ];
 
