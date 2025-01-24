@@ -4,6 +4,7 @@ import { getSentenceById } from '../services/api';
 import PosSelector from '../components/PosSelector';  // Импортируем селектор
 import { posDictionary } from '../utils/posDictionary';  // Путь зависит от структуры вашего проекта
 import { posDictionaryReverse } from '../utils/posDictionaryReverse';  // Путь зависит от структуры вашего проекта
+import FeaturesSelector from '../components/FeaturesSelector';
 
 // Кастомные теги
 const customTags = ['TTSOZ', 'ETSOZ', 'ISSOZ', 'ASSOZ', 'TTSSOZ'];
@@ -14,6 +15,7 @@ function SentenceDetail() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editingTokenId, setEditingTokenId] = useState(null); // Для редактирования токенов
+    const [editingFeatTokenId, setEditingFeatTokenId] = useState(null);
 
     useEffect(() => {
         async function fetchSentence() {
@@ -30,8 +32,6 @@ function SentenceDetail() {
     }, [id]);
 
     const handleSelectCategory = (tokenId, category) => {
-        
-
         setSentence(prevSentence => {
             const updatedSentence = {
                 ...prevSentence,
@@ -67,10 +67,15 @@ function SentenceDetail() {
         setEditingTokenId(editingTokenId === tokenId ? null : tokenId); // Переключаем редактирование
     };
 
+    const handleToggleTokenFeat = (tokenId) =>{
+        setEditingFeatTokenId(editingFeatTokenId === tokenId ? null : tokenId);
+        console.log("token feat edit start", tokenId)
+    }
+
     // Проверка перед рендерингом
     useEffect(() => {
         if (sentence && sentence !== prevSentence) {
-            console.log("Current sentence state: ", sentence);
+            //console.log("Current sentence state: ", sentence);
             // Обновляем prevSentence для следующего сравнения
             setPrevSentence(sentence);
         }
@@ -119,10 +124,18 @@ function SentenceDetail() {
                                     />
                                 )}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2">
+                            <td className="border border-gray-300 px-4 py-2 "
+                                onClick={() => handleToggleTokenFeat(token.id)}  // Активируем редактирование
+                            >
                                 {token.feats ? Object.entries(token.feats).map(([key, value], idx) => (
                                     `${key}=${value}${idx < Object.entries(token.feats).length - 1 ? '|' : ''}`
-                                )) : 'N/A'}
+                                )) : '⸺'}
+
+
+                                {editingFeatTokenId === token.id &&(
+                                    <FeaturesSelector token={token}></FeaturesSelector>
+                                )}
+                                
                             </td>
                         </tr>
                     ))}
