@@ -8,7 +8,7 @@ export const posDictionary = {
     VERB: "Этиш",
     AUX: "Көмөкчү этиш",
     ADV: "Тактооч",
-    CCONJ: "Байлмата",
+    CCONJ: "Байламта",
     SCONJ: "Жандооч",
     PART: "Бөлүкчө",
     INTJ: "Модалдык сөз",

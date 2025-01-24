@@ -11,7 +11,7 @@ const categories = [
         id: 11,
         label: "Зат атооч",
         children: [
-          { id: 111, label: "Жалпы зат атооч", designation: "NOUN" },
+          { id: 111, label: "Зат атооч", designation: "NOUN" },
           { id: 112, label: "Ээнчилүү зат атооч", designation: "PROPN" },
         ],
       },

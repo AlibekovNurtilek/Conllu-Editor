@@ -8,7 +8,7 @@ export const posDictionaryReverse = {
     "Этиш": "VERB",
     "Көмөкчү этиш": "AUX",
     "Тактооч": "ADV",
-    "Байлмата": "CCONJ",
+    "Байламта": "CCONJ",
     "Жандооч": "SCONJ",
     "Бөлүкчө": "PART",
     "Модалдык сөз": "INTJ",
