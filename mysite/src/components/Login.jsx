@@ -5,7 +5,7 @@ import { AiFillEnvironment } from "react-icons/ai";
 
 
 const users = [
-  { username: 'Nurtilek', password: 'nurtilek' },
+  { username: 'Admin', password: 'admin' },
   { username: 'Aijamal', password: 'aijamal' },
   { username: 'Gulshaiyr', password: 'gulshaiyr' },
 ];
