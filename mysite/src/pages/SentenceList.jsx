@@ -15,20 +15,16 @@ function SentenceList() {
     const pageSize = 15; // Количество записей на странице
     const pagesPerGroup = 10; // Количество страниц в одной группе
 
-    // Извлекаем параметр страницы из URL (если есть)
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const pageFromUrl = parseInt(searchParams.get('page')) || 1;
         setPage(pageFromUrl);
-    }, [location.search]);
-
-    useEffect(() => {
-        console.log("use effect")
+    
+        // Запрашиваем данные с сервера
         async function fetchData() {
-            console.log("starting fetching")
             try {
                 setLoading(true);
-                const response = await getSentences(page, pageSize);
+                const response = await getSentences(pageFromUrl, pageSize);
                 if (response && response.items) {
                     setSentences(response.items);
                     setTotalPages(response.pages);
@@ -42,8 +38,10 @@ function SentenceList() {
                 setLoading(false);
             }
         }
+    
         fetchData();
-    }, [page]);
+    }, [location.search, pageSize]); // Зависит от location.search и pageSize
+    
 
     useEffect(() => {
         setCurrentPageGroup(Math.floor((page - 1) / pagesPerGroup)); // Update page group based on current page
@@ -119,7 +117,7 @@ function SentenceList() {
                             className={`border border-gray-300 px-4 py-2 ${
                                 sentence.is_corrected ? 'bg-green-200 hover:bg-green-300': 'bg-red-100 hover:bg-red-200'
                             } cursor-pointer`}
-                            onClick={() => navigate(`/sentence/${sentence.id}`)}
+                            onClick={() => navigate(`/sentence/${sentence.id}`, { state: { page } })}
                         >
                             <td className="border border-gray-300 px-4 py-2">{sentence.id}</td>
                             <td className="border border-gray-300 px-4 py-2">{sentence.text}</td>

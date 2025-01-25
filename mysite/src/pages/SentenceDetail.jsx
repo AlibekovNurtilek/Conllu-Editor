@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { getSentenceById } from '../services/api';
 import PosSelector from '../components/PosSelector';  // Импортируем селектор
 import { posDictionary } from '../utils/posDictionary';  // Путь зависит от структуры вашего проекта
@@ -16,9 +16,11 @@ const customTags = ['TTSOZ', 'ETSOZ', 'ISSOZ', 'ASSOZ', 'TTSSOZ'];
 
 function SentenceDetail() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const page = location.state?.page || 1; // Если состояние есть, берем его, если нет — по умолчанию 1
 
     const handleGoBack = () => {
-        navigate(`/sentence-list?page=${3}`); // Вернуться на предыдущую страницу
+        navigate(`/sentence-list?page=${page}`); // Вернуться на предыдущую страницу
     };
 
 
