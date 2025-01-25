@@ -35,7 +35,6 @@ const FeaturesSelector = ({ token, closeFeatureSelector, saveFeatures}) => {
     // Обновляем состояние с новым объектом
     setFeatures(updatedFeatures);
 
-    console.log(updatedFeatures); // Логируем обновленный объект
   };
 
   const getFeatureDisplay = (features, posTag, onDelete) => {

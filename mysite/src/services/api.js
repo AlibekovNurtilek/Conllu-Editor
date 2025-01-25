@@ -44,7 +44,6 @@ export const updateSentence = async (sentenceId, updatedSentence) => {
             updated_tokens: updatedSentence.tokens
         };
 
-        console.log('Sending data:', JSON.stringify(dataToSend, null, 2));
 
         const response = await axios.put(`${API_URL}/sentences/${sentenceId}`, dataToSend);
         return response.data;

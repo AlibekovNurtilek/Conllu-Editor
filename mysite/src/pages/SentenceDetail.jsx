@@ -105,7 +105,6 @@ function SentenceDetail() {
 
     const handleToggleTokenFeat = (tokenId) =>{
         setEditingFeatTokenId(editingFeatTokenId === tokenId ? null : tokenId);
-        console.log("token feat edit start", tokenId)
     }
 
     const closeFeatureSelector = () => {
@@ -129,7 +128,7 @@ function SentenceDetail() {
     // Проверка перед рендерингом
     useEffect(() => {
         if (sentence && sentence !== prevSentence) {
-            console.log("Current sentence state: ", sentence);
+            //console.log("Current sentence state: ", sentence);
             // Обновляем prevSentence для следующего сравнения
             setPrevSentence(sentence);
         }

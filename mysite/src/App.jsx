@@ -4,6 +4,7 @@ import Login from './components/Login';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Mainpage from "./components/Mainpage";
+import Homepage from "./pages/Homepage"
 import AboutUs from "./components/AboutUs";
 import SentenceList from './pages/SentenceList';
 import SentenceDetail from './pages/SentenceDetail';
@@ -58,9 +59,9 @@ function App() {
       <Sidebar open={open} setOpen={setOpen} handleLogout={handleLogout} username={currentUser.username}/>
 
       {/* Main Content */}
-      <div className=" flex-1">
+      <div className=" flex-1 ">
         <Routes>
-          <Route path="/" element={<Mainpage/>} />
+          <Route path="/" element={<Homepage/>} />
           <Route path="/sentence-list" element={<SentenceList/>} />
           <Route path='/sentence/:id' element={<SentenceDetail/>} />
           <Route path="/about-us" element={<AboutUs/>} />
