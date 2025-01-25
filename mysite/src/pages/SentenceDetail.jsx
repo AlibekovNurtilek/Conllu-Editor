@@ -5,6 +5,8 @@ import PosSelector from '../components/PosSelector';  // Импортируем 
 import { posDictionary } from '../utils/posDictionary';  // Путь зависит от структуры вашего проекта
 import { posDictionaryReverse } from '../utils/posDictionaryReverse';  // Путь зависит от структуры вашего проекта
 import FeaturesSelector from '../components/FeaturesSelector';
+import { featuresDictionary } from "../utils/featuresDictionary"; // Импортируйте ваш словарь
+
 
 // Кастомные теги
 const customTags = ['TTSOZ', 'ETSOZ', 'ISSOZ', 'ASSOZ', 'TTSSOZ'];
@@ -72,16 +74,61 @@ function SentenceDetail() {
         console.log("token feat edit start", tokenId)
     }
 
+    const closeFeatureSelector = () => {
+        // Закрываем модалку
+        setEditingFeatTokenId(null);
+      };
+
+    const saveFeatures = (tokenId, updatedFeatures) => {
+    // Обновляем признаки токена в объекте sentence
+    const updatedTokens = sentence.tokens.map((token) => 
+        token.id === tokenId ? { ...token, feats: updatedFeatures } : token
+    );
+    
+    setSentence((prevSentence) => ({
+        ...prevSentence,
+        tokens: updatedTokens,
+    })); // Обновляем tokens в sentence
+    closeFeatureSelector(); // Закрываем модалку после сохранения
+    };
+
     // Проверка перед рендерингом
     useEffect(() => {
         if (sentence && sentence !== prevSentence) {
-            //console.log("Current sentence state: ", sentence);
+            console.log("Current sentence state: ", sentence);
             // Обновляем prevSentence для следующего сравнения
             setPrevSentence(sentence);
         }
     }, [sentence]);
     
     const [prevSentence, setPrevSentence] = useState(null);
+
+
+
+
+    const getFeatureDisplay = (features, posTag, onDelete) => {
+        if (!features) return <div>N/A</div>;
+    
+        const posFeatures = featuresDictionary[posTag];
+    
+        // Если часть речи отсутствует в словаре или у неё нет признаков, возвращаем специальный символ "⸺"
+        if (!posFeatures) return <div>⸺</div>;
+    
+        const featureElements = Object.entries(features).map(([key, value]) => {
+          const featureCategory = posFeatures[key];
+          const displayValue = featureCategory?.values?.[value] || value;
+          const displayKey = featureCategory ? featureCategory.label : key;
+    
+          return (
+            <div key={key} className="border bg-gray-200 py-1 px-2 rounded text-black flex items-center gap-2">
+              <p className="whitespace-nowrap"> {displayValue}</p>
+            </div>
+          );
+        });
+    
+        return featureElements.length > 0 ? featureElements : <div>⸺</div>;
+      };
+    
     
 
     if (loading) return <p className="text-center text-lg">Жүктөлүүдө...</p>;
@@ -113,7 +160,7 @@ function SentenceDetail() {
                             <td className="border border-gray-300 px-4 py-2">{token.form}</td>
                             <td className="border border-gray-300 px-4 py-2">{token.lemma}</td>
                             <td
-                                className="border border-gray-300 px-4 py-2 cursor-pointer relative"
+                                className="border border-gray-300 px-4 py-2 cursor-pointer"
                                 onClick={() => handleToggleToken(token.id)} // Активируем редактирование
                             >
                                 {posDictionary[token.pos] || posDictionary[token.xpos] || token.pos} {/* Проверяем сначала UPOS, затем XPOS */}
@@ -127,13 +174,13 @@ function SentenceDetail() {
                             <td className="border border-gray-300 px-4 py-2 "
                                 onClick={() => handleToggleTokenFeat(token.id)}  // Активируем редактирование
                             >
-                                {token.feats ? Object.entries(token.feats).map(([key, value], idx) => (
-                                    `${key}=${value}${idx < Object.entries(token.feats).length - 1 ? '|' : ''}`
-                                )) : '⸺'}
+                                <div className="flex overflow-x-auto  gap-2 bg-white">
+                                    {getFeatureDisplay(token.feats, token.pos)}
+                                </div>
 
 
                                 {editingFeatTokenId === token.id &&(
-                                    <FeaturesSelector token={token}></FeaturesSelector>
+                                    <FeaturesSelector token={token} closeFeatureSelector={closeFeatureSelector}  saveFeatures={saveFeatures}></FeaturesSelector>
                                 )}
                                 
                             </td>
