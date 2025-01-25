@@ -18,38 +18,25 @@ const FeaturesSelector = ({ token, closeFeatureSelector, saveFeatures}) => {
   };
 
   const handleSelectFeature = (key, valueKey, valueLabel) => {
-    // Преобразуем объект feats в массив, чтобы сохранить порядок
-    const updatedFeatures = { ...features };
-
-    // Создаем массив из ключей, чтобы отслеживать порядок
-    const featureKeys = Object.keys(updatedFeatures);
-
-    // Ищем индекс старого ключа (если он есть)
-    const oldIndex = featureKeys.indexOf(key);
-
-    // Если старое свойство найдено, удаляем его
-    if (oldIndex !== -1) {
-        delete updatedFeatures[key];
+    // Если объект features пустой, просто добавляем новый элемент
+    if (Object.keys(features).length === 0) {
+        setFeatures({ [key]: valueKey }); // Добавляем новый ключ и значение
+        return; // Прерываем выполнение функции
     }
 
-    // Вставляем новый элемент на место старого (если был)
+    // Копируем текущие данные из features
+    const updatedFeatures = { ...features };
+
+   
+
+    // Добавляем новый элемент
     updatedFeatures[key] = valueKey;
 
-    // Переводим объект обратно в массив, чтобы сохранить порядок
-    const orderedFeatures = {};
+    // Обновляем состояние с новым объектом
+    setFeatures(updatedFeatures);
 
-    featureKeys.forEach((featKey, idx) => {
-        // Если индекс совпадает, добавляем новый элемент
-        if (featKey === key) {
-            orderedFeatures[key] = valueKey; // добавляем обновленный элемент
-        } else {
-            orderedFeatures[featKey] = updatedFeatures[featKey]; // остальное без изменений
-        }
-    });
-
-    setFeatures(orderedFeatures); // Обновляем состояние
-    console.log(features)
-};
+    console.log(updatedFeatures); // Логируем обновленный объект
+  };
 
   const getFeatureDisplay = (features, posTag, onDelete) => {
     if (!features) return <div>N/A</div>;
@@ -80,16 +67,16 @@ const FeaturesSelector = ({ token, closeFeatureSelector, saveFeatures}) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10">
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] min-h-[40%] border rounded-md bg-white z-10 p-4" onClick={(e) => { e.stopPropagation() }}>
+<     div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] sm:w-[60vw] md:w-[40vw] min-h-[40vh] border rounded-md bg-white z-10 p-4" onClick={(e) => { e.stopPropagation() }}>
         <div className="font-bold text-lg mb-2">{token.form}</div>
-        <div className="border border-black rounded-md">
+        <div className="border border-black rounded-md ">
           {/* Дисплей текущих признаков */}
           <div className="flex overflow-x-auto  gap-2 bg-white border-b border-black p-2">
             {getFeatureDisplay(features, token.pos, handleDeleteFeature)}
           </div>
 
           {/* Селектор для добавления признаков */}
-          <div className="">
+          <div className="overflow-y-auto">
             {posFeatures && (
               <ul >
                 {Object.entries(posFeatures).map(([key, feature]) => {

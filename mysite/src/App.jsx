@@ -61,7 +61,7 @@ function App() {
       <div className=" flex-1">
         <Routes>
           <Route path="/" element={<Mainpage/>} />
-          <Route path="/sentences" element={<SentenceList/>} />
+          <Route path="/sentence-list" element={<SentenceList/>} />
           <Route path='/sentence/:id' element={<SentenceDetail/>} />
           <Route path="/about-us" element={<AboutUs/>} />
           <Route path='/ins' element={<Instruction/>} />

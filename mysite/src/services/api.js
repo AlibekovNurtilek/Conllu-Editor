@@ -35,12 +35,22 @@ export const createSentence = async (sentenceData) => {
     }
 };
 
-export const updateSentence = async (id, sentenceData) => {
+export const updateSentence = async (sentenceId, updatedSentence) => {
     try {
-        const response = await axios.put(`${API_URL}/sentences/${id}`, sentenceData);
+        const dataToSend = {
+            updated_sentence: {
+                text: updatedSentence.text
+            },
+            updated_tokens: updatedSentence.tokens
+        };
+
+        console.log('Sending data:', JSON.stringify(dataToSend, null, 2));
+
+        const response = await axios.put(`${API_URL}/sentences/${sentenceId}`, dataToSend);
         return response.data;
     } catch (error) {
         console.error('Error updating sentence:', error);
         throw error;
     }
 };
+
