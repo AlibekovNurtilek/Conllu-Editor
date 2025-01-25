@@ -18,22 +18,38 @@ const FeaturesSelector = ({ token, closeFeatureSelector, saveFeatures}) => {
   };
 
   const handleSelectFeature = (key, valueKey, valueLabel) => {
-    // Проверяем, есть ли уже признак для данной категории (например, Case)
+    // Преобразуем объект feats в массив, чтобы сохранить порядок
     const updatedFeatures = { ...features };
-  
-    // Если признак для категории уже существует, удаляем его
-    if (updatedFeatures[key]) {
-      delete updatedFeatures[key];
+
+    // Создаем массив из ключей, чтобы отслеживать порядок
+    const featureKeys = Object.keys(updatedFeatures);
+
+    // Ищем индекс старого ключа (если он есть)
+    const oldIndex = featureKeys.indexOf(key);
+
+    // Если старое свойство найдено, удаляем его
+    if (oldIndex !== -1) {
+        delete updatedFeatures[key];
     }
-  
-    // Добавляем новый признак
+
+    // Вставляем новый элемент на место старого (если был)
     updatedFeatures[key] = valueKey;
-  
-    // Обновляем состояние признаков
-    setFeatures(updatedFeatures);
-  
-    console.log(updatedFeatures);
-  };
+
+    // Переводим объект обратно в массив, чтобы сохранить порядок
+    const orderedFeatures = {};
+
+    featureKeys.forEach((featKey, idx) => {
+        // Если индекс совпадает, добавляем новый элемент
+        if (featKey === key) {
+            orderedFeatures[key] = valueKey; // добавляем обновленный элемент
+        } else {
+            orderedFeatures[featKey] = updatedFeatures[featKey]; // остальное без изменений
+        }
+    });
+
+    setFeatures(orderedFeatures); // Обновляем состояние
+    console.log(features)
+};
 
   const getFeatureDisplay = (features, posTag, onDelete) => {
     if (!features) return <div>N/A</div>;
@@ -63,7 +79,7 @@ const FeaturesSelector = ({ token, closeFeatureSelector, saveFeatures}) => {
   const posFeatures = featuresDictionary[token.pos];
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm ">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10">
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40%] min-h-[40%] border rounded-md bg-white z-10 p-4" onClick={(e) => { e.stopPropagation() }}>
         <div className="font-bold text-lg mb-2">{token.form}</div>
         <div className="border border-black rounded-md">

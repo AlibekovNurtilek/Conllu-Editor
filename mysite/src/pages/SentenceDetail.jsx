@@ -106,8 +106,8 @@ function SentenceDetail() {
 
 
 
-    const getFeatureDisplay = (features, posTag, onDelete) => {
-        if (!features) return <div>N/A</div>;
+    const getFeatureDisplay = (features, posTag) => {
+        if (!features) return <div>Бул соз туркуму учун касиеттер аныкталбаган</div>;
     
         const posFeatures = featuresDictionary[posTag];
     
@@ -127,7 +127,7 @@ function SentenceDetail() {
         });
     
         return featureElements.length > 0 ? featureElements : <div>⸺</div>;
-      };
+    };
     
     
 
@@ -150,7 +150,7 @@ function SentenceDetail() {
                         <th className="border border-gray-300 px-4 py-2 w-1/4">Форма</th>
                         <th className="border border-gray-300 px-4 py-2 w-1/4">Лемма</th>
                         <th className="border border-gray-300 px-4 py-2 w-1/4">Соз туркуму</th>
-                        <th className="border border-gray-300 px-4 py-2 w-1/6">Фитчи</th>
+                        <th className="border border-gray-300 px-4 py-2 w-1/6">Касиеттер</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -171,18 +171,22 @@ function SentenceDetail() {
                                     />
                                 )}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 "
+                            <td
+                                className={`border border-gray-300 px-4 py-2 
+                                    ${!featuresDictionary[token.pos] ? "opacity-50 cursor-not-allowed " : "cursor-pointer"}`}
                                 onClick={() => handleToggleTokenFeat(token.id)}  // Активируем редактирование
-                            >
-                                <div className="flex overflow-x-auto  gap-2 bg-white">
+                                >
+                                <div className="flex overflow-x-auto gap-2 bg-white">
                                     {getFeatureDisplay(token.feats, token.pos)}
                                 </div>
 
-
-                                {editingFeatTokenId === token.id &&(
-                                    <FeaturesSelector token={token} closeFeatureSelector={closeFeatureSelector}  saveFeatures={saveFeatures}></FeaturesSelector>
+                                {editingFeatTokenId === token.id && featuresDictionary[token.pos] &&(
+                                    <FeaturesSelector
+                                    token={token}
+                                    closeFeatureSelector={closeFeatureSelector}
+                                    saveFeatures={saveFeatures}
+                                    />
                                 )}
-                                
                             </td>
                         </tr>
                     ))}

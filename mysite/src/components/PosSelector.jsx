@@ -79,7 +79,7 @@ const PosSelector = ({ token, handleSelectCategory }) => {
   const [openSubCategory, setOpenSubCategory] = useState(null);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10">
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
        bg-white border-2 border-dark-purple rounded-md shadow-lg w-96 z-10">
         <div className="h-10 bg-dark-purple relative">
