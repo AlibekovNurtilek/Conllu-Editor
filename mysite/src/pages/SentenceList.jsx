@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getSentences } from '../services/api';
 
 function SentenceList() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [sentences, setSentences] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,6 +14,13 @@ function SentenceList() {
 
     const pageSize = 15; // Количество записей на странице
     const pagesPerGroup = 10; // Количество страниц в одной группе
+
+    // Извлекаем параметр страницы из URL (если есть)
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const pageFromUrl = parseInt(searchParams.get('page')) || 1;
+        setPage(pageFromUrl);
+    }, [location.search]);
 
     useEffect(() => {
         async function fetchData() {
@@ -40,25 +48,36 @@ function SentenceList() {
     }, [page]);
 
     const handleNextPage = () => {
-        if (page < totalPages) setPage((prev) => prev + 1);
+        if (page < totalPages) {
+            const nextPage = page + 1;
+            setPage(nextPage);
+            navigate(`/sentence-list?page=${nextPage}`); // Обновление URL
+        }
     };
 
     const handlePrevPage = () => {
-        if (page > 1) setPage((prev) => prev - 1);
+        if (page > 1) {
+            const prevPage = page - 1;
+            setPage(prevPage);
+            navigate(`/sentence-list?page=${prevPage}`); // Обновление URL
+        }
     };
 
     const handlePageClick = (pageNumber) => {
         setPage(pageNumber);
+        navigate(`/sentence-list?page=${pageNumber}`); // Обновление URL
     };
 
     const handleGroupChange = (direction) => {
         if (direction === 'next' && (currentPageGroup + 1) * pagesPerGroup < totalPages) {
             // Если переходим на следующую декаду, устанавливаем первую страницу следующей декады
             setPage((currentPageGroup + 1) * pagesPerGroup + 1);
+            navigate(`/sentence-list?page=${(currentPageGroup + 1) * pagesPerGroup + 1}`);
             setCurrentPageGroup((prev) => prev + 1);
         } else if (direction === 'prev' && currentPageGroup > 0) {
             // Если возвращаемся на предыдущую декаду, устанавливаем первую страницу текущей декады
-            setPage((currentPageGroup -1 ) * pagesPerGroup + 1);
+            setPage((currentPageGroup - 1) * pagesPerGroup + 1);
+            navigate(`/sentence-list?page=${(currentPageGroup - 1) * pagesPerGroup + 1}`);
             setCurrentPageGroup((prev) => prev - 1);
         }
     };
@@ -164,7 +183,6 @@ function SentenceList() {
                     Next
                 </button>
             </div>
-            
         </div>
     );
 }
