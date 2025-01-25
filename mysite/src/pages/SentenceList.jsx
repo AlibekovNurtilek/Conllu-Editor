@@ -23,7 +23,9 @@ function SentenceList() {
     }, [location.search]);
 
     useEffect(() => {
+        console.log("use effect")
         async function fetchData() {
+            console.log("starting fetching")
             try {
                 setLoading(true);
                 const response = await getSentences(page, pageSize);
@@ -92,11 +94,6 @@ function SentenceList() {
         return pageNumbers;
     };
 
-    const getGroupRange = () => {
-        const startPage = currentPageGroup * pagesPerGroup + 1;
-        const endPage = Math.min((currentPageGroup + 1) * pagesPerGroup, totalPages);
-        return `${startPage}–${endPage}`;
-    };
 
     if (loading) return (
         <div className='flex justify-center items-center h-screen'>

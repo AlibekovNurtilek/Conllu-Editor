@@ -18,7 +18,7 @@ function SentenceDetail() {
     const navigate = useNavigate();
 
     const handleGoBack = () => {
-        navigate(-1); // Вернуться на предыдущую страницу
+        navigate(`/sentence-list?page=${3}`); // Вернуться на предыдущую страницу
     };
 
 
