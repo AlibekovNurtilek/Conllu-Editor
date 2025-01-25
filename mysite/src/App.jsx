@@ -4,8 +4,11 @@ import Login from './components/Login';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Mainpage from "./components/Mainpage";
-import Instruction from "./components/Instruction";
+import Homepage from "./pages/Homepage"
 import AboutUs from "./components/AboutUs";
+import SentenceList from './pages/SentenceList';
+import SentenceDetail from './pages/SentenceDetail';
+import Instruction from './components/Instruction';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -18,7 +21,7 @@ function App() {
 
     if (savedUser && loginTime) {
       const timeElapsed = Date.now() - parseInt(loginTime, 10);
-      const sessionTimeout = 5 * 60 * 1000; // 5 минут в миллисекундах
+      const sessionTimeout = 60 * 60 * 1000; // 60 минут в миллисекундах
 
       if (timeElapsed < sessionTimeout) {
         setCurrentUser(JSON.parse(savedUser)); // Если сессия ещё активна, показываем пользователя
@@ -56,11 +59,13 @@ function App() {
       <Sidebar open={open} setOpen={setOpen} handleLogout={handleLogout} username={currentUser.username}/>
 
       {/* Main Content */}
-      <div className=" flex-1">
+      <div className=" flex-1 ">
         <Routes>
-          <Route path="/" element={<Mainpage/>} />
-          <Route path="/instruction" element={<Instruction/>} />
+          <Route path="/" element={<Homepage/>} />
+          <Route path="/sentence-list" element={<SentenceList/>} />
+          <Route path='/sentence/:id' element={<SentenceDetail/>} />
           <Route path="/about-us" element={<AboutUs/>} />
+          <Route path='/ins' element={<Instruction/>} />
         </Routes>
       </div>
     </div>

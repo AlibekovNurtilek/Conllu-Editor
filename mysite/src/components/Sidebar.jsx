@@ -13,7 +13,7 @@ import Cookies from "js-cookie";
 const Sidebar = ({ open, setOpen, handleLogout, username }) => {
   const Menus = [
     { title: "Негизги бет", path: "/" },
-    { title: "Колдонмо", icon: <AiOutlineFileText />, path: "/instruction" },
+    { title: "Суйломдор", icon: <AiOutlineFileText />, path: "/sentence-list" },
     { title: "Биз жонундо", icon: <AiFillDingtalkSquare />, path: "/about-us" },
   ];
 
@@ -37,7 +37,7 @@ const Sidebar = ({ open, setOpen, handleLogout, username }) => {
     >
       <BsArrowLeftShort
         className={`bg-white text-dark-purple text-3xl rounded-full absolute -right-3 top-9 border
-        border-darl-purple cursor-pointer ${!open && "rotate-180"}`}
+        border-darl-purple cursor-pointer ${!open && "rotate-180"} `}
         onClick={() => setOpen(!open)}
       />
 
