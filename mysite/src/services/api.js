@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://3.84.57.147';
+const API_URL = 'https://manasnlp.chickenkiller.com';
 
 export async function getSentences(page = 1, size = 10) {
     try {
