@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000';
+const API_URL = 'http://3.84.57.147';
 
 export async function getSentences(page = 1, size = 10) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/sentences?page=${page}&size=${size}`);
+        const response = await fetch(`${API_URL}/sentences?page=${page}&size=${size}`);
         if (!response.ok) {
             throw new Error('Failed to fetch sentences');
         }
