@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Mainpage from "./components/Mainpage";
 import Homepage from "./pages/Homepage"
-import AboutUs from "./components/AboutUs";
+import AboutUs from "./pages/AboutUs";
 import SentenceList from './pages/SentenceList';
 import SentenceDetail from './pages/SentenceDetail';
 import Instruction from './components/Instruction';

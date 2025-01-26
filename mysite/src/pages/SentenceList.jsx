@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getSentences } from '../services/api';
+import { FaPen } from "react-icons/fa";
+import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
+import { FaCircleXmark } from "react-icons/fa6";
+
+
 
 function SentenceList() {
     const navigate = useNavigate();
@@ -12,7 +17,7 @@ function SentenceList() {
     const [totalPages, setTotalPages] = useState(0); // Общее количество страниц
     const [currentPageGroup, setCurrentPageGroup] = useState(0); // Текущая группа страниц
 
-    const pageSize = 15; // Количество записей на странице
+    const pageSize = 16; // Количество записей на странице
     const pagesPerGroup = 10; // Количество страниц в одной группе
 
     useEffect(() => {
@@ -103,34 +108,55 @@ function SentenceList() {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Суйломдор</h1>
-            <table className="min-w-full border border-gray-300">
+            <div className="overflow-y-auto max-h-[60vh] sm:max-h-[60vh] md:max-h-[70vh] lg:max-h-[80vh]" >
+
+            
+
+            <table className="min-w-full  border-black rounded-lg overflow-hidden">
                 <thead>
-                    <tr className="bg-gray-200">
-                        <th className="border border-gray-300 px-4 py-2">ID</th>
-                        <th className="border border-gray-300 px-4 py-2">Text</th>
+                    <tr className="bg-dark-purple text-white">
+                        <th className=" px-4 py-2">ID</th>
+                        <th className=" px-4 py-2">Текст</th>
+                        <th className="px-4 py-2 w-8">Озгортуу</th>
+                        <th className="px-4 py-2 w-10">Статус</th>
                     </tr>
                 </thead>
                 <tbody>
                     {sentences.map((sentence) => (
-                        <tr
+                        <tr 
                             key={sentence.id}
-                            className={`border border-gray-300 px-4 py-2 ${
-                                sentence.is_corrected ? 'bg-green-200 hover:bg-green-300': 'bg-red-100 hover:bg-red-200'
-                            } cursor-pointer`}
-                            onClick={() => navigate(`/sentence/${sentence.id}`, { state: { page } })}
+                            className={` border-black px-4 py-2 ${
+                                sentence.is_corrected ? '': '' 
+                            } odd:bg-white even:bg-gray-200 `}
+                            
                         >
-                            <td className="border border-gray-300 px-4 py-2">{sentence.id}</td>
-                            <td className="border border-gray-300 px-4 py-2">{sentence.text}</td>
+                            <td className=" px-4 py-2">{sentence.id}</td>
+                            <td className=" px-4 py-2 text-black">{sentence.text}</td>
+                            <td className="px-4 py-2 flex justify-center items-center">
+                                <FaPen
+                                    className="text-dark-purple text-lg cursor-pointer hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
+                                    title="Озгортуу"
+                                    onClick={() => navigate(`/sentence/${sentence.id}`, { state: { page } })}
+                                />
+                            </td>
+                            <td className="px-4 py-2 ">
+                                <div className='w-[100%] flex justify-center'>                               
+                                    {sentence.is_corrected? <IoCheckmarkDoneCircleSharp className='text-xl text-green-700'/> : 
+                                        <FaCircleXmark  className='text-red-700'/>}
+                                </div>
+                            </td>
+
                         </tr>
                     ))}
                 </tbody>
             </table>
+            </div>
             <div className="flex justify-center items-center gap-4 mt-4">
                 <button
                     onClick={handlePrevPage}
                     disabled={page === 1}
                     className={`px-4 py-2 rounded ${
-                        page === 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'
+                        page === 1 ? 'bg-gray-400 cursor-not-allowed' : 'bg-dark-purple hover:bg-blue-950 text-white'
                     }`}
                 >
                     Previous
@@ -139,7 +165,7 @@ function SentenceList() {
                     onClick={() => handleGroupChange('prev')}
                     disabled={currentPageGroup === 0}
                     className={`px-4 py-2 rounded ${
-                        currentPageGroup === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'
+                        currentPageGroup === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-dark-purple hover:bg-blue-950 text-white'
                     }`}
                 >
                     &lt;&lt;
@@ -150,7 +176,7 @@ function SentenceList() {
                         onClick={() => handlePageClick(pageNumber)}
                         className={`px-4 py-2 rounded ${
                             page === pageNumber
-                                ? 'bg-blue-500 text-white'
+                                ? 'bg-dark-purple text-white'
                                 : 'bg-gray-300 hover:bg-gray-400 text-black'
                         }`}
                     >
@@ -163,7 +189,7 @@ function SentenceList() {
                     className={`px-4 py-2 rounded ${
                         (currentPageGroup + 1) * pagesPerGroup >= totalPages
                             ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-blue-500 hover:bg-blue-600 text-white'
+                            : 'bg-dark-purple hover:bg-blue-950 text-white'
                     }`}
                 >
                     &gt;&gt;
@@ -172,7 +198,7 @@ function SentenceList() {
                     onClick={handleNextPage}
                     disabled={page === totalPages}
                     className={`px-4 py-2 rounded ${
-                        page === totalPages ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'
+                        page === totalPages ? 'bg-gray-400 cursor-not-allowed' : 'bg-dark-purple hover:bg-blue-950 text-white'
                     }`}
                 >
                     Next

@@ -36,7 +36,7 @@ const Sidebar = ({ open, setOpen, handleLogout, username }) => {
       } duration-300 relative`}
     >
       <BsArrowLeftShort
-        className={`bg-white text-dark-purple text-3xl rounded-full absolute -right-3 top-9 border
+        className={`bg-white text-dark-purple text-3xl rounded-full absolute -right-3 top-9 border z-10
         border-darl-purple cursor-pointer ${!open && "rotate-180"} `}
         onClick={() => setOpen(!open)}
       />
