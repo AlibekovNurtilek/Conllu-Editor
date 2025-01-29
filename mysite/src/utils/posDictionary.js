@@ -21,5 +21,6 @@ export const posDictionary = {
     DET: "Determiner(DET)",
     PUNCT: "Тыныш белгиси",
     SYM: "Символ",
+    _: "Антыкталган эмес"
   };
   

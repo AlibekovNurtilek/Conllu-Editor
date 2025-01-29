@@ -4,6 +4,8 @@ import { getSentences } from '../services/api';
 import { FaPen } from "react-icons/fa";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { FaCircleXmark } from "react-icons/fa6";
+import { BiSolidDetail } from "react-icons/bi";
+
 
 
 
@@ -117,7 +119,8 @@ function SentenceList() {
                     <tr className="bg-dark-purple text-white">
                         <th className=" px-4 py-2">ID</th>
                         <th className=" px-4 py-2">Текст</th>
-                        <th className="px-4 py-2 w-8">Озгортуу</th>
+                        <th className="px-4 py-2 w-8">Деталдар</th>
+                        {/*<th className='px-4 py-2 w-8'>Озгортуу</th>*/}
                         <th className="px-4 py-2 w-10">Статус</th>
                     </tr>
                 </thead>
@@ -132,15 +135,29 @@ function SentenceList() {
                         >
                             <td className=" px-4 py-2">{sentence.id}</td>
                             <td className=" px-4 py-2 text-black">{sentence.text}</td>
-                            <td className="px-4 py-2 flex justify-center items-center">
-                                <FaPen
-                                    className="text-dark-purple text-lg cursor-pointer hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
-                                    title="Озгортуу"
-                                    onClick={() => navigate(`/sentence/${sentence.id}`, { state: { page } })}
-                                />
+                            
+                            <td  className='px-4 py-2'>
+                                <div className='flex justify-center items-center' >
+                                    <BiSolidDetail className="text-dark-purple text-lg cursor-pointer 
+                                        hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
+                                        title="Деталдар"
+                                        onClick={() => navigate(`/sentence/${sentence.id}`, { state: { page } })} />
+                                </div>                               
                             </td>
+
+                           {/* <td className="px-4 py-2">
+                                <div className=' flex justify-center items-center'>
+                                    <FaPen
+                                        className="text-dark-purple text-md cursor-pointer 
+                                        hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
+                                        title="Озгортуу"
+                                        onClick={() =>navigate('/edit-sentence')}
+                                    />
+                                </div>
+                            </td>*/}
+                            
                             <td className="px-4 py-2 ">
-                                <div className='w-[100%] flex justify-center'>                               
+                                <div className='w-[100%] flex justify-center items-center'>                               
                                     {sentence.is_corrected? <IoCheckmarkDoneCircleSharp className='text-xl text-green-700'/> : 
                                         <FaCircleXmark  className='text-red-700'/>}
                                 </div>

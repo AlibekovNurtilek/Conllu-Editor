@@ -3,12 +3,10 @@ import Cookies from 'js-cookie';
 import Login from './components/Login';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
-import Mainpage from "./components/Mainpage";
 import Homepage from "./pages/Homepage"
 import AboutUs from "./pages/AboutUs";
 import SentenceList from './pages/SentenceList';
 import SentenceDetail from './pages/SentenceDetail';
-import Instruction from './components/Instruction';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -65,7 +63,6 @@ function App() {
           <Route path="/sentence-list" element={<SentenceList/>} />
           <Route path='/sentence/:id' element={<SentenceDetail/>} />
           <Route path="/about-us" element={<AboutUs/>} />
-          <Route path='/ins' element={<Instruction/>} />
         </Routes>
       </div>
     </div>

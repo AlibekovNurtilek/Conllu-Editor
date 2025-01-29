@@ -14,7 +14,7 @@ const Sidebar = ({ open, setOpen, handleLogout, username }) => {
   const Menus = [
     { title: "Негизги бет", path: "/" },
     { title: "Суйломдор", icon: <AiOutlineFileText />, path: "/sentence-list" },
-    { title: "Биз жонундо", icon: <AiFillDingtalkSquare />, path: "/about-us" },
+    { title: "Биз жонундо", icon: <AiFillDingtalkSquare />, path: "/" },
   ];
 
   const BottomMenus = [
