@@ -10,8 +10,11 @@ import { useNavigate } from 'react-router-dom';
 import {updateSentence} from '../services/api'
 import Header from '../components/SentenseDetails/SentenseDetailHeader'
 import { MdDelete } from "react-icons/md";
-import { AiOutlineMergeCells } from "react-icons/ai";
 import { MdCheckBoxOutlineBlank } from "react-icons/md";
+import { FaPen } from "react-icons/fa";
+import { MdDoneOutline } from "react-icons/md";
+import PopUp from '../components/SentenseDetails/PopUp';
+
 
 
 
@@ -39,17 +42,35 @@ function SentenceDetail() {
     const [editingFeatTokenId, setEditingFeatTokenId] = useState(null);
     const [selectedTokens, setSelectedTokens] = useState([]);
     const [checkboxesVisible, setCheckboxesVisible] = useState(false);
+    const [editingFromTokenId, setEditingFromTokenId] = useState(null);
+    const [showPopUp, setShowPopUp] = useState(false); // Состояние для показа попапа
+    const [isSaving, setIsSaving] = useState(false); // Состояние для определения типа операции (сохранение или отмена)
 
 
+
+        // Функция для отображения попапа при попытке сохранить или отменить изменения
+    const handleSaveChangesClick = () => {
+        setIsSaving(true);  // Операция сохранения
+        setShowPopUp(true);  // Показываем попап
+    };
+
+    const handleCancelChangesClick = () => {
+        setIsSaving(false);  // Операция отмены
+        setShowPopUp(true);  // Показываем попап
+    };
 
     const saveChanges = async () => {
         try {
             await updateSentence(sentence.id, sentence);
-            alert('Сохранение успешно!');  // Уведомление пользователю об успешном сохранении
         } catch (error) {
             alert('Ошибка при сохранении изменений. Попробуйте еще раз.');
         }
-        handleGoBack()
+        setShowPopUp(false);  // Скрываем попап после завершения сохранения
+        handleGoBack(); // Возвращаемся на предыдущую страницу или делаем другие действия
+    };
+        // Функция для отмены действия (закрытие попапа)
+    const cancelChanges = () => {
+        setShowPopUp(false); // Закрытие попапа без сохранения
     };
 
     //Для обеденение 
@@ -85,7 +106,6 @@ function SentenceDetail() {
     
         // Создать новый токен
         const mergedToken = {
-            id: -1,
             token_index: mergedIndex,
             form: selectedTokensData.map((t) => t.form).join(" "), // Объединённая форма
             lemma: selectedTokensData.map((t) => t.form).join(" "), // Нужно будет редактировать вручную
@@ -127,6 +147,16 @@ function SentenceDetail() {
         console.log("Updated sentence:", sentence);
     }, [sentence]);
     
+
+
+
+    //для изменение формы токена 
+    const handleEditTokenFrom = (tokenId) => {
+        setEditingFromTokenId(editingFromTokenId === tokenId ? null : tokenId); // Переключаем редактирование
+    };
+    
+
+
     useEffect(() => {
         async function fetchSentence() {
             try {
@@ -217,6 +247,14 @@ function SentenceDetail() {
 
 
 
+    const handleDeleteToken = (tokenId) => {
+        setSentence((prev) => ({
+            ...prev,
+            tokens: prev.tokens.filter((token) => token.id !== tokenId) // Фильтруем токены, исключая удалённый
+        }));
+    };
+    
+
 
     const getFeatureDisplay = (features, posTag) => {
         if (!features) return <div>Список пуст</div>;
@@ -241,6 +279,33 @@ function SentenceDetail() {
         return featureElements.length > 0 ? featureElements : <div>Список пуст</div>;
     };
     
+
+    const updateSentenceText = (token) => {
+        // Проверяем, если token_index не содержит тире (то есть это одиночный индекс)
+        if (!token.token_index.includes('-')) {
+            // Получаем индекс токена в предложении
+            const tokenIndex = parseInt(token.token_index) - 1;  // индексация с 0
+    
+            // Создаём новый текст, заменяя нужное слово на обновлённое значение
+            const updatedText = sentence.text.split(' ').map((word, index) => {
+                if (index === tokenIndex) {
+                    return token.form;  // обновляем слово
+                }
+                return word;
+            }).join(' ');
+    
+            // Обновляем sentence.text
+            sentence.text = updatedText;
+    
+            
+        } else {
+            // Если token_index содержит интервал, ничего не обновляем
+            console.log('Не обновляем текст для токена с интервалом');
+        }
+        // Завершаем редактирование
+        handleEditTokenFrom(null);
+    };
+    
     
 
     if (loading) return <p className="text-center text-lg">Жүктөлүүдө...</p>;
@@ -259,12 +324,12 @@ function SentenceDetail() {
                                 {!checkboxesVisible ? (
                                     <button className=" text-white p-2 rounded"
                                     onClick={()=>toggleCheckboxes()}>
-                                    <MdCheckBoxOutlineBlank className='rotate-90 text-2xl' />
+                                    <MdCheckBoxOutlineBlank className='text-l' />
                                 </button>
                                 )
-                                :(<button className=" text-white p-2 rounded"
+                                :(<button className=" text-white p-2 m-[-3px] rounded bg-blue-700 hover:bg-blue-800"
                                     onClick={()=>createMergedToken()}>
-                                    <AiOutlineMergeCells className='rotate-90 text-2xl' />
+                                    Merge
                                 </button>
                                 )}
                                                       
@@ -273,6 +338,7 @@ function SentenceDetail() {
                             <th className="px-4 py-2 text-start">Форма</th>
                             <th className="px-4 py-2 text-start">Соз туркуму</th>
                             <th className="px-4 py-2 text-start">Касиеттер</th>
+                            <th className="px-4 py-2 text-center" ></th>
                             <th className="px-4 py-2 text-center" ></th>
                         </tr>
                     </thead>
@@ -291,7 +357,26 @@ function SentenceDetail() {
                                                                 
                                 </td>
                                 <td className="px-4 py-2 w-18">{token.token_index}</td>
-                                <td className="px-4 py-2">{token.form}</td>
+                                <td className="px-4 py-2">
+                                    {editingFromTokenId === token.id ? (
+                                        <input className='p-2 border-none'
+                                            autoFocus
+                                            type="text"
+                                            value={token.form}
+                                            onChange={(e) => {
+                                                const newForm = e.target.value;
+                                                setSentence(prevSentence => ({
+                                                    ...prevSentence,
+                                                    tokens: prevSentence.tokens.map(t => 
+                                                        t.id === token.id ? { ...t, form: newForm } : t
+                                                    )
+                                                }));
+                                            }}
+                                        />
+                                    ) : (
+                                        token.form
+                                    )}
+                                </td>
                                 <td
                                     className="px-4 py-2 cursor-pointer  "
                                     onClick={() => handleToggleToken(token.id)} // Активируем редактирование
@@ -324,9 +409,34 @@ function SentenceDetail() {
                                 </td>
                                 
                                 <td className='px-4 py-2 w-12'>
-                                    <div className='flex items-center justify-center' >
-                                        <MdDelete className='text-2xl text-red-800 hover:text-red-900 cursor-pointer' />
-                                    </div>                                   
+                                    <div>
+                                    {editingFromTokenId === token.id ? (
+                                        <div className="text-green-600 cursor-pointer flex items-center justify-center" 
+                                            onClick={() => updateSentenceText(token)}>
+                                            <MdDoneOutline  className='bg-green-700 text-white rounded-[50%] p-1 text-2xl
+                                                hover:transform hover:translate-y-[-2px] transition-transform duration-300 hover:bg-green-800'/>
+                                        </div>
+                                    ) : (
+                                        <FaPen
+                                            className="text-dark-purple text-lg cursor-pointer 
+                                            hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
+                                            title="Озгортуу"
+                                            onClick={() => handleEditTokenFrom(token.id)}     
+                                        />
+                                    )}
+
+                                    </div>
+                                </td>
+
+                                <td className='px-4 py-2 w-12'>
+                                    {token.token_index.includes('-') && ( // Проверяем, содержит ли token_index дефис
+                                        <div className='flex items-center justify-center'>
+                                            <MdDelete className='text-2xl text-red-800 hover:text-red-900 
+                                                cursor-pointer hover:translate-y-[-2px] 
+                                                transition-transform duration-300'
+                                                onClick={() => handleDeleteToken(token.id)} />
+                                        </div>
+                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -335,9 +445,20 @@ function SentenceDetail() {
             </div>
             <div className="flex mt-2 justify-between">
                 <button className="bg-red-950 px-6 w-[49%] py-2 rounded-md text-white text-lg font-semibold hover:bg-red-900 "
-                    onClick={handleGoBack}> Отмена</button>
+                    onClick={handleCancelChangesClick}> Отмена</button>
                 <button className="bg-dark-purple px-6 w-[49%] py-2 rounded-md text-white text-lg font-semibold hover:bg-blue-900"
-                    onClick={saveChanges} > Сактоо</button>
+                    onClick={handleSaveChangesClick} > Сактоо
+                    </button>
+                {/* Показываем попап, если состояние showPopUp == true */}
+                {showPopUp && (
+                    <PopUp
+                    message={isSaving ? "Вы уверены, что хотите сохранить изменения?" : "Вы уверены, что хотите отменить изменения?"}
+                    confirmButtonText={isSaving ? "ОК" : "Да, отменить"}
+                    cancelButtonText="Отмена"
+                    onConfirm={isSaving ? saveChanges : handleGoBack}  // Функция зависит от операции
+                    onCancel={() => setShowPopUp(false)}  // Закрыть попап при отмене
+                    />
+                )}
             </div>
         </div>
     );

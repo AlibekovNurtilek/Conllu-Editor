@@ -120,7 +120,7 @@ function SentenceList() {
                         <th className=" px-4 py-2">ID</th>
                         <th className=" px-4 py-2">Текст</th>
                         <th className="px-4 py-2 w-8">Деталдар</th>
-                        <th className='px-4 py-2 w-8'>Озгортуу</th>
+                        {/*<th className='px-4 py-2 w-8'>Озгортуу</th>*/}
                         <th className="px-4 py-2 w-10">Статус</th>
                     </tr>
                 </thead>
@@ -145,14 +145,16 @@ function SentenceList() {
                                 </div>                               
                             </td>
 
-                            <td className="px-4 py-2 flex justify-center items-center">
-                                <FaPen
-                                    className="text-dark-purple text-lg cursor-pointer 
-                                    hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
-                                    title="Озгортуу"
-                                    onClick={() =>navigate('/edit-sentence')}
-                                />
-                            </td>
+                           {/* <td className="px-4 py-2">
+                                <div className=' flex justify-center items-center'>
+                                    <FaPen
+                                        className="text-dark-purple text-md cursor-pointer 
+                                        hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
+                                        title="Озгортуу"
+                                        onClick={() =>navigate('/edit-sentence')}
+                                    />
+                                </div>
+                            </td>*/}
                             
                             <td className="px-4 py-2 ">
                                 <div className='w-[100%] flex justify-center items-center'>                               

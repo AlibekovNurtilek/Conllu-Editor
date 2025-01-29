@@ -66,7 +66,7 @@ const FeaturesSelector = ({ token, closeFeatureSelector, saveFeatures}) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10">
-<     div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] sm:w-[60vw] md:w-[40vw] min-h-[40vh] border rounded-md bg-white z-10 p-4" onClick={(e) => { e.stopPropagation() }}>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80vw] sm:w-[60vw] md:w-[40vw] min-h-[40vh] border rounded-md bg-white z-10 p-4" onClick={(e) => { e.stopPropagation() }}>
         <div className="font-bold text-lg mb-2">{token.form}</div>
         <div className="border border-black rounded-md ">
           {/* Дисплей текущих признаков */}
