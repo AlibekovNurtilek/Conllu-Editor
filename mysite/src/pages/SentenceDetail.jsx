@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import {updateSentence} from '../services/api'
 import Header from '../components/SentenseDetails/SentenseDetailHeader'
 import { MdDelete } from "react-icons/md";
+import { AiOutlineMergeCells } from "react-icons/ai";
+import { MdCheckBoxOutlineBlank } from "react-icons/md";
+
 
 
 
@@ -35,6 +38,7 @@ function SentenceDetail() {
     const [editingTokenId, setEditingTokenId] = useState(null); // Для редактирования токенов
     const [editingFeatTokenId, setEditingFeatTokenId] = useState(null);
     const [selectedTokens, setSelectedTokens] = useState([]);
+    const [checkboxesVisible, setCheckboxesVisible] = useState(false);
 
 
 
@@ -68,6 +72,9 @@ function SentenceDetail() {
     };
 
     const createMergedToken = () => {
+        // Очистить выбор
+        setSelectedTokens([]);
+        toggleCheckboxes();
         if (selectedTokens.length < 2) return;
     
         const mergedIndex = getMergedTokenIndex();
@@ -78,15 +85,16 @@ function SentenceDetail() {
     
         // Создать новый токен
         const mergedToken = {
+            id: -1,
             token_index: mergedIndex,
             form: selectedTokensData.map((t) => t.form).join(" "), // Объединённая форма
             lemma: selectedTokensData.map((t) => t.form).join(" "), // Нужно будет редактировать вручную
             pos: "X", // Или предложи выбор
             xpos: "_",
-            feats: {}, // Можно добавить выбор фич
-            head: null,
+            feats: null, // Можно добавить выбор фич
+            head: selectedTokensData[0].head,
             deprel: "_",
-            misc: "{}"
+            misc: "None"
         };
     
         // Добавить новый токен в список
@@ -94,8 +102,8 @@ function SentenceDetail() {
             ...prev,
             tokens: [...prev.tokens, mergedToken]
         }));
-        // Очистить выбор
-        setSelectedTokens([]);
+
+        
     };
     const sortTokens = (tokens) => {
         return [...tokens].sort((a, b) => {
@@ -110,7 +118,14 @@ function SentenceDetail() {
     
 
     
+
+    const toggleCheckboxes = () => {
+        setCheckboxesVisible((prev) => !prev); // Переключаем состояние видимости
+    };
     
+    useEffect(() => {
+        console.log("Updated sentence:", sentence);
+    }, [sentence]);
     
     useEffect(() => {
         async function fetchSentence() {
@@ -240,22 +255,42 @@ function SentenceDetail() {
                 <table className="min-w-full rounded-lg overflow-hidden">
                     <thead>
                         <tr className="bg-dark-purple text-white">
-                            <th className="px-4 py-2 text-start">Индекс</th>
+                            <th>
+                                {!checkboxesVisible ? (
+                                    <button className=" text-white p-2 rounded"
+                                    onClick={()=>toggleCheckboxes()}>
+                                    <MdCheckBoxOutlineBlank className='rotate-90 text-2xl' />
+                                </button>
+                                )
+                                :(<button className=" text-white p-2 rounded"
+                                    onClick={()=>createMergedToken()}>
+                                    <AiOutlineMergeCells className='rotate-90 text-2xl' />
+                                </button>
+                                )}
+                                                      
+                            </th>
+                            <th className="px-4 py-2 text-start">Id</th>
                             <th className="px-4 py-2 text-start">Форма</th>
                             <th className="px-4 py-2 text-start">Соз туркуму</th>
                             <th className="px-4 py-2 text-start">Касиеттер</th>
-                            <th className="px-4 py-2 text-center" colSpan={2}>
-                                <button className="bg-green-800 text-white p-2 rounded hover:bg-green-700"
-                                    onClick={()=>createMergedToken()}>
-                                    Бириктируу
-                                </button>
-                            </th>
+                            <th className="px-4 py-2 text-center" ></th>
                         </tr>
                     </thead>
                     <tbody>
                         {sortTokens(sentence.tokens).map((token, index) => (
                             <tr key={index} className="odd:bg-white even:bg-gray-200 ">
-                                <td className="px-4 py-2">{token.token_index}</td>
+                                <td className='px-4 py-2 w-12'>
+                                {checkboxesVisible && (
+                                    <div className='flex items-center justify-center'> 
+                                    <input type='checkbox'
+                                        checked={selectedTokens.includes(token.id)} 
+                                        onChange={() => handleTokenSelection(token.id)}/>
+                                </div>      
+                                )}
+
+                                                                
+                                </td>
+                                <td className="px-4 py-2 w-18">{token.token_index}</td>
                                 <td className="px-4 py-2">{token.form}</td>
                                 <td
                                     className="px-4 py-2 cursor-pointer  "
@@ -287,13 +322,7 @@ function SentenceDetail() {
                                         />
                                     )}
                                 </td>
-                                <td className='px-4 py-2 w-12'>
-                                    <div className='flex items-center justify-center'> 
-                                        <input type='checkbox'
-                                            checked={selectedTokens.includes(token.id)} 
-                                            onChange={() => handleTokenSelection(token.id)}/>
-                                    </div>                                  
-                                </td>
+                                
                                 <td className='px-4 py-2 w-12'>
                                     <div className='flex items-center justify-center' >
                                         <MdDelete className='text-2xl text-red-800 hover:text-red-900 cursor-pointer' />
