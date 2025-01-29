@@ -21,4 +21,5 @@ export const posDictionaryReverse = {
     "Determiner(DET)": "DET",
     "Тыныш белгиси": "PUNCT",
     "Символ": "SYM",
+    "Антыкталган эмес": "_"
 };

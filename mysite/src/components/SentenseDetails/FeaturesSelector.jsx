@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { featuresDictionary } from "../utils/featuresDictionary"; // Импортируйте ваш словарь
+import { featuresDictionary } from "../../utils/featuresDictionary"; // Импортируйте ваш словарь
 import { HiMiniXMark } from "react-icons/hi2";
 
 const FeaturesSelector = ({ token, closeFeatureSelector, saveFeatures}) => {
