@@ -18,6 +18,13 @@ export const featuresDictionary = {
             Plur: "Көптүк сан",   // Множественное
           },
         },
+        Poss: {
+          label: "Таандык",
+          values:{
+            Yes: "Таандык з.а",
+            No: "Таандык эмес з.а"
+          }
+        }
         
     },
     PRON: {

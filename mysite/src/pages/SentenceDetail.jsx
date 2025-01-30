@@ -10,12 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import {updateSentence} from '../services/api'
 import Header from '../components/SentenseDetails/SentenseDetailHeader'
 import { MdDelete } from "react-icons/md";
-import { MdCheckBoxOutlineBlank } from "react-icons/md";
 import { FaPen } from "react-icons/fa";
 import { MdDoneOutline } from "react-icons/md";
 import PopUp from '../components/SentenseDetails/PopUp';
-
-
+import { BsSearch } from "react-icons/bs";
+import { IoFilterSharp } from "react-icons/io5";
+import { IoMdDownload } from "react-icons/io";
 
 
 
@@ -41,7 +41,6 @@ function SentenceDetail() {
     const [editingTokenId, setEditingTokenId] = useState(null); // Для редактирования токенов
     const [editingFeatTokenId, setEditingFeatTokenId] = useState(null);
     const [selectedTokens, setSelectedTokens] = useState([]);
-    const [checkboxesVisible, setCheckboxesVisible] = useState(false);
     const [editingFromTokenId, setEditingFromTokenId] = useState(null);
     const [showPopUp, setShowPopUp] = useState(false); // Состояние для показа попапа
     const [isSaving, setIsSaving] = useState(false); // Состояние для определения типа операции (сохранение или отмена)
@@ -74,16 +73,16 @@ function SentenceDetail() {
     };
 
     //Для обеденение 
-    const handleTokenSelection = (tokenId) => {
+    const handleTokenSelection = (token) => {
         setSelectedTokens((prev) =>
-            prev.includes(tokenId) ? prev.filter((id) => id !== tokenId) : [...prev, tokenId]
+            prev.includes(token) ? prev.filter((id) => id !== token) : [...prev, token]
         );
     };
 
     const getMergedTokenIndex = () => {
         if (selectedTokens.length < 2) return null; // Должно быть минимум 2 токена
-        const indices = selectedTokens.map((id) => {
-            const token = sentence.tokens.find((t) => t.id === id);
+        const indices = selectedTokens.map((selectedToken) => {
+            const token = sentence.tokens.find((t) => t.id === selectedToken.id);
             return token ? parseInt(token.token_index) : null;
         }).filter((index) => index !== null);
     
@@ -95,14 +94,13 @@ function SentenceDetail() {
     const createMergedToken = () => {
         // Очистить выбор
         setSelectedTokens([]);
-        toggleCheckboxes();
         if (selectedTokens.length < 2) return;
     
         const mergedIndex = getMergedTokenIndex();
         if (!mergedIndex) return;
     
         // Найти все выбранные токены
-        const selectedTokensData = sentence.tokens.filter((t) => selectedTokens.includes(t.id));
+        const selectedTokensData = sentence.tokens.filter((t) => selectedTokens.includes(t));
     
         // Создать новый токен
         const mergedToken = {
@@ -139,16 +137,9 @@ function SentenceDetail() {
 
     
 
-    const toggleCheckboxes = () => {
-        setCheckboxesVisible((prev) => !prev); // Переключаем состояние видимости
-    };
+   
+   
     
-    useEffect(() => {
-        console.log("Updated sentence:", sentence);
-    }, [sentence]);
-    
-
-
 
     //для изменение формы токена 
     const handleEditTokenFrom = (tokenId) => {
@@ -247,11 +238,17 @@ function SentenceDetail() {
 
 
 
-    const handleDeleteToken = (tokenId) => {
+    const handleDeleteToken = () => {
+        if (selectedTokens.length === 0) return;
+    
+        // Фильтруем токены, исключая те, что выбраны для удаления
         setSentence((prev) => ({
             ...prev,
-            tokens: prev.tokens.filter((token) => token.id !== tokenId) // Фильтруем токены, исключая удалённый
+            tokens: prev.tokens.filter((token) => !selectedTokens.includes(token))
         }));
+    
+        // Очистить выбор после удаления
+        setSelectedTokens([]);
     };
     
 
@@ -317,45 +314,81 @@ function SentenceDetail() {
             <Header sentence={sentence} />
             
             <div className="overflow-y-auto max-h-[60vh] sm:max-h-[60vh] md:max-h-[70vh] lg:max-h-[80vh]">
-                <table className="min-w-full rounded-lg overflow-hidden">
+                <table className="table-fixed w-full rounded-t-lg overflow-hidden">
                     <thead>
-                        <tr className="bg-dark-purple text-white">
-                            <th>
-                                {!checkboxesVisible ? (
-                                    <button className=" text-white p-2 rounded"
-                                    onClick={()=>toggleCheckboxes()}>
-                                    <MdCheckBoxOutlineBlank className='text-l' />
-                                </button>
-                                )
-                                :(<button className=" text-white p-2 m-[-3px] rounded bg-blue-700 hover:bg-blue-800"
-                                    onClick={()=>createMergedToken()}>
-                                    Merge
-                                </button>
-                                )}
-                                                      
-                            </th>
-                            <th className="px-4 py-2 text-start">Id</th>
-                            <th className="px-4 py-2 text-start">Форма</th>
-                            <th className="px-4 py-2 text-start">Соз туркуму</th>
-                            <th className="px-4 py-2 text-start">Касиеттер</th>
-                            <th className="px-4 py-2 text-center" ></th>
-                            <th className="px-4 py-2 text-center" ></th>
-                        </tr>
+                       {selectedTokens.length === 0 ? (
+                            <tr className='h-20 bg-dark-purple border-none duration-300'>
+                                <th colSpan='3' className='w-40 text-white text-lg '>
+                                    <div className='flex border-b border-light-white items-center w-72 ml-10 text-md justify-between'>
+                                        <input type='text' placeholder='Издөө' className='bg-transparent focus:outline-none' />
+                                        <BsSearch />
+                                    </div>
+                                </th>
+                                <th colSpan='2' />
+                                <th className='px-4 py-2 text-end w-60'>
+                                    <div className='flex items-center text-white gap-1 text-lg justify-end'>
+                                        <div className='flex items-center p-2 rounded-md cursor-pointer gap-2'>
+                                            <IoFilterSharp />
+                                            <p>Add filters</p>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th className='px-4 py-2 w-32'>
+                                    <div className='flex items-center justify-end text-white p-2 rounded-md cursor-pointer gap-2'>
+                                        <IoMdDownload />
+                                        <p>Export</p>
+                                    </div>
+                                </th>
+                            </tr>
+                        ) : (
+                            <tr className='bg-blue-800 h-20 duration-300'>
+                                <th colSpan='3' className='w-60 text-white text-lg pl-10 text-start'>
+                                    {selectedTokens.length} соз тандалды
+                                </th>
+                                <th colSpan='2'/>
+                                <th className='px-4 py-2 text-end w-60'>
+                                    <div className='flex items-center text-white gap-1 text-lg justify-end'>
+                                        <div className='flex items-center hover:bg-blue-700 p-2 rounded-md cursor-pointer active:bg-blue-600'
+                                        onClick={()=>createMergedToken()}>
+                                            <IoMdDownload />
+                                            <p>Бириктирүү</p>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th className='px-4 py-2 w-32'>
+                                    <div className='flex text-lg items-center hover:bg-red-600 p-2 rounded-md cursor-pointer text-red-600 active:bg-red-500 hover:text-white'
+                                    onClick={()=>handleDeleteToken()}>
+                                        <MdDelete />
+                                        <p>Очуруу</p>
+                                    </div>
+                                </th>
+                            </tr>
+                    )}
                     </thead>
+                </table>
+                <table className="table-fixed w-full rounded-b-lg overflow-hidden">
+                    <thead>
+                    <tr className="bg-dark-purple text-white">
+                        <th className=" w-12 "></th>
+                        <th className="px-4 py-2 w-16 text-start">Id</th>
+                        <th className="px-4 py-2 text-start w-[20%]">Форма</th>
+                        <th className="px-4 py-2 text-start w-[20%]">Соз туркуму</th>
+                        <th className="px-4 py-2 text-start w-[35%]">Касиеттер</th>
+                        <th className="px-4 py-2 w-16 text-center"></th>
+                    </tr>
+                    </thead>
+
                     <tbody>
                         {sortTokens(sentence.tokens).map((token, index) => (
                             <tr key={index} className="odd:bg-white even:bg-gray-200 ">
-                                <td className='px-4 py-2 w-12'>
-                                {checkboxesVisible && (
+                                <td className='px-4 py-2 w-12'>                                
                                     <div className='flex items-center justify-center'> 
-                                    <input type='checkbox'
-                                        checked={selectedTokens.includes(token.id)} 
-                                        onChange={() => handleTokenSelection(token.id)}/>
-                                </div>      
-                                )}
-
-                                                                
+                                        <input type='checkbox'
+                                            checked={selectedTokens.includes(token)} 
+                                            onChange={() => handleTokenSelection(token)}/>
+                                    </div>                                  
                                 </td>
+
                                 <td className="px-4 py-2 w-18">{token.token_index}</td>
                                 <td className="px-4 py-2">
                                     {editingFromTokenId === token.id ? (
@@ -409,34 +442,25 @@ function SentenceDetail() {
                                 </td>
                                 
                                 <td className='px-4 py-2 w-12'>
-                                    <div>
-                                    {editingFromTokenId === token.id ? (
-                                        <div className="text-green-600 cursor-pointer flex items-center justify-center" 
-                                            onClick={() => updateSentenceText(token)}>
-                                            <MdDoneOutline  className='bg-green-700 text-white rounded-[50%] p-1 text-2xl
-                                                hover:transform hover:translate-y-[-2px] transition-transform duration-300 hover:bg-green-800'/>
-                                        </div>
-                                    ) : (
-                                        <FaPen
-                                            className="text-dark-purple text-lg cursor-pointer 
-                                            hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
-                                            title="Озгортуу"
-                                            onClick={() => handleEditTokenFrom(token.id)}     
-                                        />
-                                    )}
+                                        <div>
+                                        {editingFromTokenId === token.id ? (
+                                            <div className="text-green-600 cursor-pointer flex items-center justify-center" 
+                                                onClick={() => updateSentenceText(token)}>
+                                                <MdDoneOutline  className='bg-green-700 text-white rounded-[50%] p-1 text-2xl
+                                                    hover:transform hover:translate-y-[-2px] transition-transform duration-300 hover:bg-green-800'/>
+                                            </div>
+                                        ) : (
+                                            <div className="text-green-600 cursor-pointer flex items-center justify-center" >
+                                                <FaPen
+                                                    className="text-dark-purple text-lg cursor-pointer 
+                                                    hover:text-green-800 hover:transform hover:translate-y-[-2px] transition-transform duration-300"
+                                                    title="Озгортуу"
+                                                    onClick={() => handleEditTokenFrom(token.id)}     
+                                                />
+                                            </div>
+                                        )}
 
                                     </div>
-                                </td>
-
-                                <td className='px-4 py-2 w-12'>
-                                    {token.token_index.includes('-') && ( // Проверяем, содержит ли token_index дефис
-                                        <div className='flex items-center justify-center'>
-                                            <MdDelete className='text-2xl text-red-800 hover:text-red-900 
-                                                cursor-pointer hover:translate-y-[-2px] 
-                                                transition-transform duration-300'
-                                                onClick={() => handleDeleteToken(token.id)} />
-                                        </div>
-                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -465,3 +489,5 @@ function SentenceDetail() {
 }
 
 export default SentenceDetail;
+
+{/* jfofrjg ro ipoj eroijt  erjgt eriojot erw setoijh  drsoig drsj  rijg seorij  srjgoj e erghij   srg roi  jr ger */}
