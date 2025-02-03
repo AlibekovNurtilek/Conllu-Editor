@@ -20,7 +20,7 @@ import { IoMdDownload } from "react-icons/io";
 
 
 // Кастомные теги
-const customTags = ['TTSOZ', 'ETSOZ', 'ISSOZ', 'ASSOZ', 'TTSSOZ'];
+const customTags = ['TTSOZ', 'ETSOZ', 'ISSOZ', 'ASSOZ', 'TTSSOZ',];
 
 function SentenceDetail() {
     const navigate = useNavigate();

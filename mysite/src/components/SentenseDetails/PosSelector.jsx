@@ -66,8 +66,8 @@ const categories = [
     id: 4,
     label: "Башка...",
     children: [
-      { id: 41, label: "Adposition(ADP)", designation: "ADP" },
-      { id: 42, label: "Determiner(DET)", designation: "DET" },
+      { id: 41, label: "Атоочтук", designation: "ATOOCH" },
+      { id: 42, label: "Кыймыл атооч", designation: "KTOOCH" },
       { id: 43, label: "Тыныш белгиси", designation: "PUNCT" },
       { id: 44, label: "Символ", designation: "SYM" },
     ],
