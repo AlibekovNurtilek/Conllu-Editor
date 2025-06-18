@@ -14,7 +14,7 @@ const Sidebar = ({ open, setOpen, handleLogout, username }) => {
   const Menus = [
     { title: "Негизги бет", path: "/" },
     { title: "Суйломдор", icon: <AiOutlineFileText />, path: "/sentence-list" },
-    { title: "Биз жонундо", icon: <AiFillDingtalkSquare />, path: "/" },
+    { title: "Сынап көрүү", icon: <AiFillDingtalkSquare />, path: "https://aitilchi.home.kg/home" },
   ];
 
   const BottomMenus = [
@@ -41,19 +41,21 @@ const Sidebar = ({ open, setOpen, handleLogout, username }) => {
         onClick={() => setOpen(!open)}
       />
 
-      <div className="inline-flex">
-        <AiFillEnvironment
-          className={`bg-amber-300 text-4xl rounded cursor-pointer block float-left mr-2 duration-500 ${
+      <div className="inline-flex ml-1">
+        <div className={`text-4xl text-red-700 bg-blue-50 rounded-full w-8 h-8 cursor-pointer block float-left duration-500 ${
             open && "rotate-[360deg]"
-          }`}
-        />
+          }`}> <p className="pl-1 font-medium text-2xl">
+            AI
+          </p>
+        </div>
+        
 
         <h1
-          className={`text-white origin-left font-medium text-2xl duration-300 ${
+          className={`text-white origin-left  h-8 px-2 font-medium text-2xl duration-300 ${
             !open && "scale-0"
           }`}
         >
-          ManasNPL
+          Tilchi
         </h1>
       </div>
 
