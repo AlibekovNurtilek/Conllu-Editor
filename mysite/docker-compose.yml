@@ -1,13 +1,11 @@
-version: "3.3"
+version: '3.8'
+
 services:
   frontend:
-    container_name: frontend_app
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vite_frontend
     ports:
       - "3000:80"
-    restart: always
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    restart: unless-stopped
