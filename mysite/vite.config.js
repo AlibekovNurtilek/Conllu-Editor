@@ -1,15 +1,19 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  
+  // ВАЖНО: гарантирует, что пути в index.html будут корректны (особенно для продакшна)
+  base: '/',
+
+  // Прокси только для dev-сервера
   server: {
     proxy: {
       '/api': {
-        target: 'http://https://3.84.57.147:8000', // Замените <your-fastapi-server> на адрес вашего FastAPI-сервера
+        target: 'http://3.84.57.147:8000',  // 👈 исправленный адрес FastAPI
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''), // Удаляет префикс '/api' из запроса
+        rewrite: (path) => path.replace(/^\/api/, ''), // удаляем /api перед запросом
       },
     },
   },
