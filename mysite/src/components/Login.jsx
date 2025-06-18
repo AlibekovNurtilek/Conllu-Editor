@@ -84,8 +84,8 @@ function Login({ onLogin }) {
         <div className='flex justify-center mt-28'>
           <div className="inline-flex ml-1">
             <div
-              className={`text-4xl text-red-700 bg-blue-50 w-8 h-8 cursor-pointer block duration-500 transition-all ${
-                open ? "rotate-[360deg] rounded-l-full" : "rounded-full"
+              className={`text-4xl text-red-700 bg-blue-50 w-8 h-8 rounded-full cursor-pointer block duration-500 transition-all ${
+                open & "rotate-[360deg]"
               }`}
               onClick={() => setOpen(!open)}
             >
