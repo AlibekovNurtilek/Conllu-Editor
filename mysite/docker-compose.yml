@@ -1,9 +1,13 @@
-version: "3.8"
-
+version: "3.3"
 services:
   frontend:
-    container_name: vite_react_app
+    container_name: frontend_app
     build: .
     ports:
-      - "4173:4173"
-    restart: unless-stopped
+      - "3000:80"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
