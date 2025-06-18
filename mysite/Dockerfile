@@ -1,28 +1,17 @@
-# 1. Этап сборки (build stage)
-FROM node:18-alpine AS builder
-
-# Установка рабочей директории
+# Билдим приложение
+FROM node:20 AS build
 WORKDIR /app
-
-# Копируем package.json и устанавливаем зависимости
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm install
-
-# Копируем остальные файлы и собираем проект
 COPY . .
 RUN npm run build
 
-# 2. Этап сервера (production stage)
+# Статический сервер
 FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Копируем собранные файлы из предыдущего этапа в Nginx директорию
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Кастомный nginx.conf (если нужно)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Копируем кастомный конфиг nginx, если есть (необязательно)
-# COPY nginx.conf /etc/nginx/nginx.conf
-
-# Открываем порт
 EXPOSE 80
-
-# Команда по умолчанию
 CMD ["nginx", "-g", "daemon off;"]
